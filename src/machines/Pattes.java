@@ -29,8 +29,18 @@ public class Pattes extends Robots {
      * Vitesse réduit à 10 km/h sur de la roche
      */
     public double getSpeed(NatureTerrain neighbor) {
+        if (neighbor == null) {
+            return this.speed;
+        }
         if (neighbor == NatureTerrain.ROCHE) {
-            return 20;
+            if (this.position.getBiome() != NatureTerrain.ROCHE) {
+                return 20;   
+            }
+        }
+        if (this.position.getBiome() == NatureTerrain.ROCHE) {
+            if (neighbor != NatureTerrain.ROCHE) {
+                return 20;   
+            }
         }
         return this.speed;
     }
@@ -39,8 +49,11 @@ public class Pattes extends Robots {
      * Ne peut se déplacer sur l'eau
      */
     @Override
-    public void move(Direction dir, NatureTerrain neighbor) throws MoveImpossibleException {
-        if (neighbor != NatureTerrain.EAU) {
+    public void move(Direction dir, Case neighbor) throws MoveImpossibleException {
+        if (neighbor == null) {
+            super.move(dir, neighbor);
+        }
+        else if (neighbor != null && neighbor.getBiome() != NatureTerrain.EAU) {
             super.move(dir, neighbor);
         }
         else {

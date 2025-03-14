@@ -55,12 +55,15 @@ public class Roues extends Robots{
      * Ne se déplace que sur du terrain libre ou des habitats
      */
     @Override
-    public void move(Direction dir, NatureTerrain neighbor) throws MoveImpossibleException {
-        if (neighbor == NatureTerrain.TERRAIN_LIBRE || neighbor == NatureTerrain.HABITAT) {
+    public void move(Direction dir, Case neighbor) throws MoveImpossibleException {
+        if (neighbor == null) {
+            super.move(dir, neighbor);
+        }
+        else if (neighbor.getBiome() == NatureTerrain.TERRAIN_LIBRE || neighbor.getBiome() == NatureTerrain.HABITAT) {
             super.move(dir, neighbor);
         }
         else {
-            throw new MoveImpossibleException("Déplacement Impossible sur " + neighbor.name());
+            throw new MoveImpossibleException("Déplacement Impossible sur " + neighbor.getBiome().name());
         }
     }
 

@@ -99,8 +99,8 @@ public abstract class Robots {
      * @param biome Paramètre non nécessaire ici mais necessaire pour l'override
      * @throws MoveImpossibleException Si déplacement hors des limites
      */
-    public void move(Direction dir, NatureTerrain biome) throws MoveImpossibleException{
-        if (this.position.getMap().getNeighbor(this.position, dir)!=null) {
+    public void move(Direction dir, Case neighbor) throws MoveImpossibleException{
+        if (neighbor != null && this.position.getMap().getNeighbor(this.position, dir)!=null) {
             this.position = this.position.getMap().getNeighbor(position, dir);
         }
         else {

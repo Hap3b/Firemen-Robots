@@ -54,8 +54,16 @@ public class Chenilles extends Robots{
      * Vitesse divisée par deux en forêt
      */
     public double getSpeed(NatureTerrain neighbor) {
+        if (neighbor == null) {
+            return this.speed;
+        }
         if (neighbor == NatureTerrain.FORET) {
-            return 0.75*this.speed;
+            if (this.position.getBiome()!=NatureTerrain.FORET) {
+                return 0.75*this.speed;
+            }
+        }
+        else if (this.position.getBiome()==NatureTerrain.FORET) {
+            return 1.5*this.speed;
         }
         return this.speed;
     }
@@ -64,10 +72,13 @@ public class Chenilles extends Robots{
      * Ne peut se déplacer sur l'eau ou de la roche
      */
     @Override
-    public void move(Direction dir, NatureTerrain neighbor) throws MoveImpossibleException {
-        if (neighbor != NatureTerrain.EAU && neighbor != NatureTerrain.ROCHE) {
+    public void move(Direction dir, Case neighbor) throws MoveImpossibleException {
+        if (neighbor == null) {
             super.move(dir, neighbor);
-            if (neighbor == NatureTerrain.FORET) {
+        }
+        else if (neighbor.getBiome() != NatureTerrain.EAU && neighbor.getBiome() != NatureTerrain.ROCHE) {
+            super.move(dir, neighbor);
+            if (neighbor.getBiome() == NatureTerrain.FORET) {
                 this.speed /= 2;
             }
             else if (this.position.getBiome() == NatureTerrain.FORET) {
@@ -75,7 +86,7 @@ public class Chenilles extends Robots{
             }
         }
         else {
-            throw new MoveImpossibleException("Déplacement Impossible sur " + neighbor.name());
+            throw new MoveImpossibleException("Déplacement Impossible sur " + neighbor.getBiome().name());
         }
     }
 
