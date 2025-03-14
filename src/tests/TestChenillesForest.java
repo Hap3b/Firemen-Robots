@@ -1,6 +1,11 @@
 package tests;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
+
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
 import java.awt.Color;
 
 import field.Direction;
@@ -14,7 +19,8 @@ import simulator.Events.Exceptions.RefillImpossibleException;
 import simulator.Events.Exceptions.TurnOffImpossibleException;
 
 public class TestChenillesForest {
-        public static void main(String[] args) throws FileNotFoundException, DataFormatException,
+    @Test
+    public void testChenillesForest() throws FileNotFoundException, DataFormatException,
     MoveImpossibleException, RefillImpossibleException, TurnOffImpossibleException {
         DonneesSimulation data = new DonneesSimulation();
         data = LecteurDonnees.lire("cartes/carteTestsChenilles-4x4.map");
@@ -22,17 +28,21 @@ public class TestChenillesForest {
         int nbCol = data.getMap().getNbCol();
         int size = data.getMap().getSizeCase();
         Move right1 = new Move(0, data.getRobots()[0], Direction.EST);
-        Move top = new Move(500, data.getRobots()[0], Direction.NORD);
-        Move right2 = new Move(1500, data.getRobots()[0], Direction.EST);
+        Move top = new Move(right1.getDateEnd(), data.getRobots()[0], Direction.NORD);
 
-        // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(Math.min(nbLine*size, 5000), Math.min(nbCol*size, 5000), Color.BLACK);
-        // crée l'invader, en l'associant à la fenêtre graphique précédente
         Simulator sim = new Simulator(gui, data);
         sim.addEvents(right1);
         sim.addEvents(top);
-        sim.addEvents(right2);
         top.setSim(sim);
+
+        for (long i = 0; i < top.getDateEnd(); i++) {
+            sim.execute();
+        }
+
+        int speed = (int) data.getRobots()[0].getSpeed(null);
+
+        assertEquals(speed, 30);
     }
 }
 

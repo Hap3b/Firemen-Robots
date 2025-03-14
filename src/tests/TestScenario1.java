@@ -2,6 +2,11 @@ package tests;
 
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
+
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
 import java.awt.Color;
 
 import field.Direction;
@@ -18,7 +23,8 @@ import simulator.Events.Exceptions.RefillImpossibleException;
 import simulator.Events.Exceptions.TurnOffImpossibleException;
 
 public class TestScenario1 {
-    public static void main(String[] args) throws FileNotFoundException, DataFormatException,
+    @Test
+    public void testScenario1() throws FileNotFoundException, DataFormatException,
     MoveImpossibleException, RefillImpossibleException, TurnOffImpossibleException {
         DonneesSimulation data = new DonneesSimulation();
         data = LecteurDonnees.lire("cartes/carteSujet.map");
@@ -54,12 +60,16 @@ public class TestScenario1 {
         Move right2 = new Move(dateEvt, firemen, Direction.EST);
         sim.addEvents(right2);
         dateEvt = right2.getDateEnd();
-        for (int i = 0; i < (int) firemen.getReserve()/firemen.getQuantityWater(); i++) {
+        for (int i = 0; i<30; i++) {
             TurnOff intervention = new TurnOff(dateEvt, firemen);
             sim.addEvents(intervention);
             dateEvt = intervention.getDateEnd();
         }
-        Move bot = new Move(dateEvt, firemen, Direction.SUD);
-        sim.addEvents(bot);
+
+        for (long i = 0; i<dateEvt; i++) {
+            sim.execute();
+        }
+
+        assertEquals(firemen.getPosition().getFire().getLife(), 0);
     }
 }

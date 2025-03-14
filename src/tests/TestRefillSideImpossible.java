@@ -2,6 +2,12 @@ package tests;
 
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
+
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+
 import java.awt.Color;
 
 import gui.GUISimulator;
@@ -14,7 +20,8 @@ import simulator.Events.Exceptions.RefillImpossibleException;
 import simulator.Events.Exceptions.TurnOffImpossibleException;
 
 public class TestRefillSideImpossible {
-    public static void main(String[] args) throws FileNotFoundException, DataFormatException,
+    @Test
+    public void testSideImpossible() throws FileNotFoundException, DataFormatException,
     MoveImpossibleException, RefillImpossibleException, TurnOffImpossibleException {
         DonneesSimulation data = new DonneesSimulation();
         data = LecteurDonnees.lire("cartes/carteSujet.map");
@@ -28,5 +35,12 @@ public class TestRefillSideImpossible {
         Simulator sim = new Simulator(gui, data);
         sim.addEvents(fill);
         fill.setSim(sim);
+        RefillImpossibleException exception = assertThrows(RefillImpossibleException.class, () -> {
+            for (long i = 0; i<fill.getDateEnd(); i++) {
+                sim.execute();
+            }
+        });
+
+        assertEquals("Recharge Impossible en (5, 6)", exception.getMessage());
     }
 }

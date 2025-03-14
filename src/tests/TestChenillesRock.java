@@ -1,6 +1,12 @@
 package tests;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
+
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+
 import java.awt.Color;
 
 import field.Direction;
@@ -14,7 +20,8 @@ import simulator.Events.Exceptions.RefillImpossibleException;
 import simulator.Events.Exceptions.TurnOffImpossibleException;
 
 public class TestChenillesRock {
-    public static void main(String[] args) throws FileNotFoundException, DataFormatException,
+    @Test
+    public void testChenillesRock() throws FileNotFoundException, DataFormatException,
     MoveImpossibleException, RefillImpossibleException, TurnOffImpossibleException {
         DonneesSimulation data = new DonneesSimulation();
         data = LecteurDonnees.lire("cartes/carteTestsChenilles-4x4.map");
@@ -29,5 +36,13 @@ public class TestChenillesRock {
         Simulator sim = new Simulator(gui, data);
         sim.addEvents(top);
         top.setSim(sim);
+
+        MoveImpossibleException exception = assertThrows(MoveImpossibleException.class, () -> {
+            for (long i = 0; i < top.getDateEnd(); i++) {
+                sim.execute();
+            }
+        });
+
+        assertEquals("Déplacement Impossible sur ROCHE", exception.getMessage());
     }
 }
