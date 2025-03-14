@@ -91,7 +91,6 @@ public class Simulator implements Simulable {
 
     @Override
     public void next() {
-        this.dateIncr();
         if (!this.endedSim()) {
             try {
                 this.execute();
@@ -189,6 +188,7 @@ public class Simulator implements Simulable {
      * @throws TurnOffImpossibleException
      */
     public void execute() throws MoveImpossibleException, RefillImpossibleException, TurnOffImpossibleException {
+        this.dateIncr();
         Evenement e = this.eventsPriorityQueue.poll();
         e.execute();
         if (e.getDateEnd()>this.dateSimulation) {
