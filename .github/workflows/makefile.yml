@@ -8,24 +8,23 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Compile
-      run: make compile
+      - name: Compile
+        run: make compile
 
   test:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Install xvfb
-      run: sudo apt-get install xvfb
+      - name: Install xvfb
+        run: sudo apt-get install xvfb
 
-    -name: Run tests with xvfb
-      run: xvfb-run --auto-servernum make test
+      - name: Run tests with xvfb
+        run: |
+          xvfb-run --auto-servernum make test
