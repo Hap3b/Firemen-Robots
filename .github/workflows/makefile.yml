@@ -29,6 +29,3 @@ jobs:
 
     -name: Run tests with xvfb
       run: xvfb-run --auto-servernum make test
-
-    - name: Run tests
-      run: make test
