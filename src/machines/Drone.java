@@ -45,6 +45,10 @@ public class Drone extends Robots{
         }
     }
 
+    public Drone(Drone drone) {
+        super(drone);
+    }
+
     /**
      * Jamais ralentit 
      * Accès à toutes les cases
@@ -79,6 +83,6 @@ public class Drone extends Robots{
 
     @Override
     public Drone clone() {
-        return new Drone(this.position);
+        return new Drone(this);
     }
 }

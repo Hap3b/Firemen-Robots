@@ -44,6 +44,10 @@ public class Roues extends Robots{
         }
     }
 
+    public Roues(Roues other) {
+        super(other);
+    }
+
     /**
      * Jamais ralentit
      */
@@ -81,6 +85,6 @@ public class Roues extends Robots{
 
     @Override
     public Roues clone() {
-        return new Roues(this.position);
+        return new Roues(this);
     }
 }

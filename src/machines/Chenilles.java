@@ -49,7 +49,11 @@ public class Chenilles extends Robots{
             this.speed = 60;
         }
     }
-
+    
+    public Chenilles(Chenilles chenilles) {
+        super(chenilles);
+    }
+    
     /**
      * Vitesse divisée par deux en forêt
      */
@@ -67,7 +71,7 @@ public class Chenilles extends Robots{
         }
         return this.speed;
     }
-
+    
     /**
      * Ne peut se déplacer sur l'eau ou de la roche
      */
@@ -89,21 +93,21 @@ public class Chenilles extends Robots{
             throw new MoveImpossibleException("Déplacement Impossible sur " + neighbor.getBiome().name());
         }
     }
-
+    
     public void draw(GUISimulator gui) {
         int lig = this.position.getLine();
         int col = this.position.getColumn();
         int size = (int) this.position.getMap().getSizeCase()/3;
         size = Math.min(size, 110);
-
+    
         int smallImage = (int) (0.8*size);
         int center = (int) (0.1*size);
-
+    
         gui.addGraphicalElement(new ImageElement(50+size*col+center, 50+size*lig+center, "images/chenille.jpeg", smallImage, smallImage, gui));
     }
-
+    
     @Override
     public Chenilles clone() {
-        return new Chenilles(this.position);
+        return new Chenilles(this);
     }
 }

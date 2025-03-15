@@ -41,6 +41,21 @@ public class Case {
     }
 
     /**
+     * Copie profonde de Case
+     * @param other Case à copier
+     */
+    public Case(Case other) {
+        this.line = other.line;
+        this.column = other.column;
+        this.biome = other.biome;
+        if (other.fire != null) {
+            this.fire = new Incendie(other.fire);
+        } else {
+            this.fire = null;
+        }
+    }
+
+    /**
      * 
      * @return La ligne de la case
      */

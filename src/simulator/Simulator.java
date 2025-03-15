@@ -22,7 +22,7 @@ import java.util.PriorityQueue;
  * 5 attributs gui, data, initialization, dateSimulatio, eventsPriorityQueue
  * gui de type GUISimulator: interface graphique de la simulation
  * data de type DonneesSimulation: données de la simulation
- * initialization de type DonneesSimulation: attribut servant à la réinitialisation
+ * initialData de type DonneesSimulation: attribut servant à la réinitialisation
  * eventsPriorityQueue une file de priorité d'Evenement
  * dateSimulation de type long: nombre de secondes depuis le début de la simulation
  */
@@ -30,7 +30,7 @@ public class Simulator implements Simulable {
 
     private GUISimulator gui;
     private DonneesSimulation data;
-    private DonneesSimulation initialization;
+    private DonneesSimulation initialData;
     private PriorityQueue<Evenement> eventsPriorityQueue = new PriorityQueue<>();
 
     protected long dateSimulation;
@@ -82,7 +82,15 @@ public class Simulator implements Simulable {
     public Simulator(GUISimulator gui, DonneesSimulation data) {
         this.gui = gui;
         this.data = data;
-        this.initialization = data.clone();
+        Robots[] initialRobots = new Robots[data.getRobots().length];
+        for (int i = 0; i < initialRobots.length; i++) {
+            initialRobots[i] = (data.getRobots()[i] != null) ? data.getRobots()[i].clone() : null;
+        }
+        Incendie[] initialFire = new Incendie[data.getFire().length];
+        for (int i = 0; i < initialFire.length; i++) {
+            initialFire[i] = (data.getFire()[i] != null) ? data.getFire()[i].clone() : null;
+        }
+        this.initialData = new DonneesSimulation(data.getMap(), initialRobots, initialFire);
         gui.setSimulable(this);
         this.dateSimulation = 0;
 
@@ -102,9 +110,19 @@ public class Simulator implements Simulable {
 
     @Override
     public void restart() {
-        this.data = this.initialization;
+        Robots[] initialRobots = new Robots[initialData.getRobots().length];
+        for (int i = 0; i < initialRobots.length; i++) {
+            initialRobots[i] = (initialData.getRobots()[i] != null) ? initialData.getRobots()[i].clone() : null;
+        }
+        Incendie[] initialFire = new Incendie[initialData.getFire().length];
+        for (int i = 0; i < initialFire.length; i++) {
+            initialFire[i] = (initialData.getFire()[i] != null) ? initialData.getFire()[i].clone() : null;
+        }
+        this.data = new DonneesSimulation(initialData.getMap(), initialRobots, initialFire);
         this.dateSimulation = 0;
+        this.eventsPriorityQueue.clear();
         drawMap();
+        
     }
 
     /**

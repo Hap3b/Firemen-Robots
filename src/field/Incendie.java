@@ -22,6 +22,15 @@ public class Incendie {
     }
 
     /**
+     * Copie profonde d'un incendie
+     * @param other Copie
+     */
+    public Incendie(Incendie other) {
+        this.position = new Case(other.position);
+        this.life = other.life;
+    }
+
+    /**
      * Réduction du feu du volume
      * @param vol Volume d'eau qui diminue le feu
      */

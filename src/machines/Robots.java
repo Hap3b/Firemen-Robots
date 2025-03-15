@@ -39,6 +39,21 @@ public abstract class Robots {
     }
 
     /**
+     * Copie profonde d'un robot
+     * @param other Copie
+     */
+    public Robots(Robots other) {
+        this.position = new Case(other.position); // Copie de la position
+        this.reserve = other.reserve;
+        this.water = other.water;
+        this.speed = other.speed;
+        this.timeWater = other.timeWater;
+        this.quantityWater = other.quantityWater;
+        this.timeRefill = other.timeRefill;
+    }
+    
+
+    /**
      * Méthode abstraite qui renvoie la vitesse du robot en fonction
      * du voisin
      * @param neighbor
@@ -152,4 +167,8 @@ public abstract class Robots {
             throw new RefillImpossibleException("Recharge Impossible en (" + this.position.getColumn() + ", " + this.position.getLine() + ")");
         }
     }
+
+    @Override
+    public abstract Robots clone();
+
 }

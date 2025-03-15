@@ -25,6 +25,10 @@ public class Pattes extends Robots {
         this.timeRefill = 0;
     }
 
+    public Pattes(Pattes other) {
+        super(other);
+    }
+
     /**
      * Vitesse réduit à 10 km/h sur de la roche
      */
@@ -81,7 +85,7 @@ public class Pattes extends Robots {
 
     @Override
     public Pattes clone() {
-        return new Pattes(this.position);
+        return new Pattes(this);
     }
 
     /**
