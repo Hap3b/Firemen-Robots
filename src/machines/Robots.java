@@ -1,5 +1,8 @@
 package machines;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import field.Case;
 import field.Direction;
 import field.NatureTerrain;
@@ -27,6 +30,7 @@ public abstract class Robots {
     protected int timeWater;
     protected int quantityWater;
     protected int timeRefill;
+    protected Map<Direction, Double>[] graph;
 
     /**
      * Constructeur protégé car classe abstraite
