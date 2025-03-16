@@ -2,8 +2,10 @@ package machines;
 
 import field.NatureTerrain;
 import field.Case;
+import field.Direction;
 import gui.GUISimulator;
 import gui.ImageElement;
+import simulator.Events.Exceptions.MoveImpossibleException;
 import simulator.Events.Exceptions.RefillImpossibleException;
 
 public class Drone extends Robots{
@@ -43,6 +45,7 @@ public class Drone extends Robots{
         else {
             this.speed = 100;
         }
+        this.buildGraph();
     }
 
     public Drone(Drone drone) {
@@ -55,6 +58,21 @@ public class Drone extends Robots{
      */
     public double getSpeed(NatureTerrain neighbor) {
         return this.speed;
+    }
+
+    /**
+     * Calcule la vitesse à laquelle un drone se rends depuis une case donnée dans une certaine direction
+     * @param pos Case départ
+     * @param dir Direction dans laquelle regarder
+     * @return Vitesse pour se rendre dans la direction indiquée depuis la position
+     * @throws MoveImpossibleException
+     */
+    public double getSpeed(Case pos, Direction dir) throws MoveImpossibleException {
+        Case neighbor = position.getMap().getNeighbor(pos, dir);
+        if (neighbor == null) {
+            throw new MoveImpossibleException("Déplacement Impossibe");
+        }
+        return this.getSpeed(neighbor.getBiome());
     }
 
     /**

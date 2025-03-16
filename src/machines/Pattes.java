@@ -23,6 +23,7 @@ public class Pattes extends Robots {
         this.timeWater = 1;
         this.quantityWater = 10;
         this.timeRefill = 0;
+        this.buildGraph();
     }
 
     public Pattes(Pattes other) {
@@ -47,6 +48,21 @@ public class Pattes extends Robots {
             }
         }
         return this.speed;
+    }
+
+    /**
+     * Méthode pour calculer la vitesse dans une direction à partir d'une case
+     * @param pos Case depuis laquelle regarder
+     * @param dir Direction dans laquelle regarder
+     * @return Vitesse pour déplacer le robot dans la direction indiquée
+     * @throws MoveImpossibleException Si le déplacement est impossible
+     */
+    public double getSpeed(Case pos, Direction dir) throws MoveImpossibleException {
+        Case neighbor = position.getMap().getNeighbor(pos, dir);
+        if (neighbor == null || neighbor.getBiome() == NatureTerrain.EAU) {
+            throw new MoveImpossibleException("Déplacement impossible");
+        }
+        return this.getSpeed(neighbor.getBiome());
     }
 
     /**

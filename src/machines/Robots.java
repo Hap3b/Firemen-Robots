@@ -62,6 +62,39 @@ public abstract class Robots {
     public abstract double getSpeed(NatureTerrain neighbor);
 
     /**
+     * Méthode abstraite pour renvoyer la vitesse du robot pour se rendre
+     * dans une direction à partir d'une Case
+     * @param pos Case départ
+     * @param dir Direction dans laquelle regarder
+     * @return Vitesse pour se déplacer dans un direction depuis la case
+     * @throws MoveImpossibleException Si le déplacement est impossible
+     */
+    public abstract double getSpeed(Case pos, Direction dir) throws MoveImpossibleException;
+
+    /**
+     * Methode pour construire le graphe propre à chaque Robot
+     */
+    protected void buildGraph() {
+        int nbLine = position.getMap().getNbLine();
+        int nbCol = position.getMap().getNbCol();
+        this.graph = new HashMap[nbLine*nbCol];
+
+        for (int i = 0; i < graph.length; i++) {
+            graph[i] = new HashMap<>();
+            int line = i / nbCol;
+            int col = i % nbLine;
+            Case pos = new Case(line, col);
+            for (Direction dir : Direction.values()) {
+                try {
+                    graph[i].put(dir, this.getSpeed(pos, dir));
+                } catch (MoveImpossibleException e) {
+                    graph[i].put(dir, Double.MAX_VALUE);
+                }
+            }
+        }
+    }
+
+    /**
      * Méthode abstraite permettant de dessiner un robot
      * @param gui Interface graphique sur laquelle dessiner
      */

@@ -26,6 +26,7 @@ public class Chenilles extends Robots{
         this.quantityWater = 100;
         this.timeWater = 8;
         this.timeRefill = 5;
+        this.buildGraph();
     }
 
     /**
@@ -68,6 +69,32 @@ public class Chenilles extends Robots{
         }
         else if (this.position.getBiome()==NatureTerrain.FORET) {
             return 1.5*this.speed;
+        }
+        return this.speed;
+    }
+
+    /**
+     * Méthode pour calculer la vitesse entre une case et son voisin dans la direction indiquée
+     * Utiliser dans la calcul de plus courts chemins
+     * @param pos La case depuis laquelle calculer
+     * @param dir La direction dans laquelle regarder
+     * @return La vitesse du robot pour se déplacer de la case dans la direction
+     * @throws MoveImpossibleException Si le déplacement est impossible
+     */
+    public double getSpeed(Case pos, Direction dir) throws MoveImpossibleException {
+        Case neighbor = position.getMap().getNeighbor(pos, dir);
+        if (neighbor == null || neighbor.getBiome() == NatureTerrain.EAU || neighbor.getBiome() == NatureTerrain.ROCHE) {
+            throw new MoveImpossibleException("Déplacement impossible");
+        }
+        if (pos.getBiome() != NatureTerrain.FORET) {
+            if (neighbor.getBiome()==NatureTerrain.FORET) {
+                return 0.75*this.speed;
+            }
+        }
+        else {
+            if (neighbor.getBiome() != NatureTerrain.FORET) {
+                return 1.5*this.speed;
+            }
         }
         return this.speed;
     }

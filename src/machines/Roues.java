@@ -42,6 +42,7 @@ public class Roues extends Robots{
         if (speed >= 0) {
             this.speed = speed;
         }
+        this.buildGraph();
     }
 
     public Roues(Roues other) {
@@ -53,6 +54,21 @@ public class Roues extends Robots{
      */
     public double getSpeed(NatureTerrain neighbor) {
         return this.speed;
+    }
+
+    /**
+     * Méthode pour calculer la vitesse
+     * @param pos
+     * @param dir
+     * @return
+     * @throws MoveImpossibleException
+    */
+    public double getSpeed(Case pos, Direction dir) throws MoveImpossibleException {
+        Case neighbor = position.getMap().getNeighbor(pos, dir);
+        if (neighbor == null || (neighbor.getBiome() != NatureTerrain.TERRAIN_LIBRE && neighbor.getBiome() != NatureTerrain.HABITAT)) {
+            throw new MoveImpossibleException("Déplacement impossible");
+        }
+        return this.getSpeed(neighbor.getBiome());
     }
 
     /**
