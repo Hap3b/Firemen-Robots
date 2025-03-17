@@ -1,12 +1,15 @@
 package machines;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 import field.Case;
 import field.Direction;
 import field.NatureTerrain;
 import gui.GUISimulator;
+import paths.Node;
 import simulator.Events.Exceptions.MoveImpossibleException;
 import simulator.Events.Exceptions.RefillImpossibleException;
 import simulator.Events.Exceptions.TurnOffImpossibleException;;
@@ -96,6 +99,10 @@ public abstract class Robots {
                 }
             }
         }
+    }
+
+    public Map<Direction, Double>[] getGraph() {
+        return this.graph;
     }
 
     /**
