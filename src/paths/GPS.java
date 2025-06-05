@@ -1,9 +1,8 @@
 package paths;
 
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Deque;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
@@ -91,8 +90,8 @@ public class GPS {
      * @param dim Dimension de la carte.
      * @return Liste de Directions à prendre pour se diriger de source à destination.
      */
-    public static List<Direction> reconstructPath(Direction[] prev, int src, int target, int dim) {
-        List<Direction> path = new LinkedList<>();
+    public static Deque<Direction> reconstructPath(Direction[] prev, int src, int target, int dim) {
+        Deque<Direction> path = new LinkedList<>();
         int cur = target;
         while (prev[cur] != Direction.NONE) {
             Direction dir = prev[cur];
@@ -114,6 +113,6 @@ public class GPS {
             }
             path.addFirst(dir);
         }
-        return cur == src ? path : Collections.emptyList();
+        return cur == src ? path : new LinkedList<>();
     }
 }

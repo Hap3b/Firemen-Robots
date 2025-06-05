@@ -1,8 +1,8 @@
 package machines;
 
-import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
 
 import field.Case;
@@ -36,7 +36,7 @@ public abstract class Robots {
     protected int quantityWater;
     protected int timeRefill;
     protected Map<Direction, Double>[] graph;
-    private List<Direction> path = Collections.emptyList();
+    private Deque<Direction> path = new LinkedList<>();
     private static Simulator sim;
 
     /**
@@ -112,18 +112,21 @@ public abstract class Robots {
         return this.graph;
     }
 
-    public void setPath(List<Direction> path) {
+    public void setPath(Deque<Direction> path) {
         this.path = path;
     }
 
-    public void moveAllTheWay(Case dest, long dateStart) throws MoveImpossibleException {
+    public void moveAllTheWay(Case dest, long dateStart, Simulator simulator) throws MoveImpossibleException {
+        if (Robots.sim == null) {
+            Robots.sim = simulator;
+        }
         GPS.costPaths(position, dest, this);
         long date = dateStart;
         for (Direction dir : path) {
             Move move = new Move(date, this, dir);
             double speed = this.getSpeed(position.getMap().getNeighbor(position, dir).getBiome());
             date = (long) ((long) 3.6*position.getMap().getSizeCase()/speed) + date;
-            sim.addEvents(move);
+            Robots.sim.addEvents(move);
         }
     }
 
