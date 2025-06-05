@@ -2,7 +2,6 @@ package tests;
 
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.List;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -16,7 +15,7 @@ public class TestReconstructPath {
     @Category(NoGUITests.class)
     public void testReconstructPath() {
         Direction[] prev = {Direction.NONE, Direction.EST, Direction.NONE, Direction.OUEST, Direction.SUD, Direction.NORD, Direction.SUD, Direction.EST, Direction.EST};
-        List<Direction> sut = GPS.reconstructPath(prev, 0, 5, 3);
+        Deque<Direction> sut = GPS.reconstructPath(prev, 0, 5, 3);
         Deque<Direction> result =  new LinkedList<>();
         result.addFirst(Direction.NORD);
         result.addFirst(Direction.EST);
