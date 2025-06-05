@@ -75,12 +75,13 @@ public class Roues extends Robots{
      * Ne se déplace que sur du terrain libre ou des habitats
      */
     @Override
-    public void move(Direction dir, Case neighbor) throws MoveImpossibleException {
+    public void move(Direction dir) throws MoveImpossibleException {
+        Case neighbor = position.getMap().getNeighbor(position, dir);
         if (neighbor == null) {
-            super.move(dir, neighbor);
+            super.move(dir);
         }
         else if (neighbor.getBiome() == NatureTerrain.TERRAIN_LIBRE || neighbor.getBiome() == NatureTerrain.HABITAT) {
-            super.move(dir, neighbor);
+            super.move(dir);
         }
         else {
             throw new MoveImpossibleException("Déplacement Impossible sur " + neighbor.getBiome().name());

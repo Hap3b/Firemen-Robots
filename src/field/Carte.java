@@ -134,7 +134,6 @@ public class Carte {
                     return null;
                 }
         }
-        System.out.println("No neighbors");
         return null;
     }
 

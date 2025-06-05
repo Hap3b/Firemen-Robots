@@ -103,12 +103,13 @@ public class Chenilles extends Robots{
      * Ne peut se déplacer sur l'eau ou de la roche
      */
     @Override
-    public void move(Direction dir, Case neighbor) throws MoveImpossibleException {
+    public void move(Direction dir) throws MoveImpossibleException {
+        Case neighbor = position.getMap().getNeighbor(position, dir);
         if (neighbor == null) {
-            super.move(dir, neighbor);
+            super.move(dir);
         }
         else if (neighbor.getBiome() != NatureTerrain.EAU && neighbor.getBiome() != NatureTerrain.ROCHE) {
-            super.move(dir, neighbor);
+            super.move(dir);
             if (neighbor.getBiome() == NatureTerrain.FORET) {
                 this.speed /= 2;
             }

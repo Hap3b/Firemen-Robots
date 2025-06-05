@@ -2,7 +2,6 @@ package simulator.Events;
 
 import machines.Robots;
 import simulator.Events.Exceptions.MoveImpossibleException;
-import field.Case;
 import field.Direction;
 
 /**
@@ -25,7 +24,7 @@ public class Move extends Evenement {
         this.machine = machine;
         this.dir = dir;
         double speed = machine.getSpeed(machine.getPosition().getMap().getNeighbor(machine.getPosition(), dir).getBiome());
-        this.dateEnd = (long) ((long) 3.6*machine.getPosition().getMap().getSizeCase()/speed) + date;
+        this.dateEnd = (long) ((long) 3.6*machine.getPosition().getMap().getSizeCase()/speed) + date; // Convertion
     }
 
     /**
@@ -37,8 +36,7 @@ public class Move extends Evenement {
             if (machine.getPosition().getFire()!=null && machine.getPosition().getFire().getLife()>0) {
                 sim.drawFire(machine.getPosition());
             }
-            Case neighbor = machine.getPosition().getMap().getNeighbor(machine.getPosition(), this.dir);
-            machine.move(this.dir, neighbor);
+            machine.move(this.dir);
 
             machine.draw(sim.getGUI());
         }

@@ -69,12 +69,13 @@ public class Pattes extends Robots {
      * Ne peut se déplacer sur l'eau
      */
     @Override
-    public void move(Direction dir, Case neighbor) throws MoveImpossibleException {
+    public void move(Direction dir) throws MoveImpossibleException {
+        Case neighbor = position.getMap().getNeighbor(position, dir);
         if (neighbor == null) {
-            super.move(dir, neighbor);
+            super.move(dir);
         }
         else if (neighbor != null && neighbor.getBiome() != NatureTerrain.EAU) {
-            super.move(dir, neighbor);
+            super.move(dir);
         }
         else {
             throw new MoveImpossibleException("Déplacement sur l'eau impossible");
