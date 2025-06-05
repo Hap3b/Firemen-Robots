@@ -1,15 +1,17 @@
 package machines;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
 
 import field.Case;
 import field.Direction;
 import field.NatureTerrain;
 import gui.GUISimulator;
-import paths.Node;
+import paths.GPS;
+import simulator.Simulator;
+import simulator.Events.Move;
 import simulator.Events.Exceptions.MoveImpossibleException;
 import simulator.Events.Exceptions.RefillImpossibleException;
 import simulator.Events.Exceptions.TurnOffImpossibleException;;
@@ -34,6 +36,8 @@ public abstract class Robots {
     protected int quantityWater;
     protected int timeRefill;
     protected Map<Direction, Double>[] graph;
+    private List<Direction> path = Collections.emptyList();
+    private static Simulator sim;
 
     /**
      * Constructeur protégé car classe abstraite
@@ -84,7 +88,7 @@ public abstract class Robots {
     protected void buildGraph() {
         int nbLine = position.getMap().getNbLine();
         int nbCol = position.getMap().getNbCol();
-        this.graph = new HashMap[nbLine*nbCol];
+        this.graph = new Map[nbLine*nbCol];
 
         for (int i = 0; i < graph.length; i++) {
             graph[i] = new HashMap<>();
@@ -102,7 +106,25 @@ public abstract class Robots {
     }
 
     public Map<Direction, Double>[] getGraph() {
+        if (graph == null) {
+            buildGraph();
+        }
         return this.graph;
+    }
+
+    public void setPath(List<Direction> path) {
+        this.path = path;
+    }
+
+    public void moveAllTheWay(Case dest, long dateStart) throws MoveImpossibleException {
+        GPS.costPaths(position, dest, this);
+        long date = dateStart;
+        for (Direction dir : path) {
+            Move move = new Move(date, this, dir);
+            double speed = this.getSpeed(position.getMap().getNeighbor(position, dir).getBiome());
+            date = (long) ((long) 3.6*position.getMap().getSizeCase()/speed) + date;
+            sim.addEvents(move);
+        }
     }
 
     /**
@@ -199,7 +221,8 @@ public abstract class Robots {
         boolean waterAvailable = false;
 
         for (Direction dir : Direction.values()) {
-            if (this.position.getMap().getNeighbor(this.position, dir).getBiome() == NatureTerrain.EAU) {
+            if (dir != Direction.NONE && 
+            this.position.getMap().getNeighbor(this.position, dir).getBiome() == NatureTerrain.EAU) {
                 waterAvailable = true;
             }
         }

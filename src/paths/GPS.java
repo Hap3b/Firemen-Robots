@@ -12,6 +12,13 @@ import field.Direction;
 import machines.Robots;
 
 public class GPS {
+    /**
+     * Calcule le temps nécessaire à un robot pour se rendre d'un case A à une case B.
+     * @param source Point de départ du robot.
+     * @param destination Point d'arrivée du robot.
+     * @param machine Robot qui se déplace.
+     * @return Plus cours temps pour se rendre de source à destination.
+     */
     public static long costPaths(Case source, Case destination, Robots machine) {
         PriorityQueue<Node> pq = new PriorityQueue<>();
 
@@ -20,14 +27,10 @@ public class GPS {
         Direction[] prev = new Direction[dim*dim];
 
         int target = destination.getLine()*dim+destination.getColumn();
+        int src = source.getLine()*dim+source.getColumn();
 
         Arrays.fill(dist, Integer.MAX_VALUE);
-        Arrays.fill(prev, -1);
-
-        int line = source.getLine();
-        int col = source.getColumn();
-
-        int src = line*dim+col;
+        Arrays.fill(prev, Direction.NONE);
 
         Map<Direction, Double>[] graph = machine.getGraph();
 
@@ -41,6 +44,9 @@ public class GPS {
             if (u == target) break;
 
             for (Direction direction : Direction.values()) {
+                if (direction == Direction.NONE) {
+                    break;
+                }
                 double speed = graph[u].get(direction);
                 if (speed != Double.MAX_VALUE) {
 
@@ -63,7 +69,7 @@ public class GPS {
                             break;
                     }
 
-                    long weight = (long) ((long) ((long) 3.6*source.getMap().getSizeCase())/speed);
+                    long weight = (long) ((long) ((long) 3.6*source.getMap().getSizeCase())/speed); // Convertion
 
                     if (dist[u] + weight < dist[v]) {
                         dist[v] = dist[u] + weight;
@@ -73,15 +79,41 @@ public class GPS {
                 }
             }
         }
+        machine.setPath(reconstructPath(prev, src, target, dim));
         return dist[target];
     }
 
-/*     public static List<Direction> reconstructPath(Direction[] prev, int src, int target) {
+    /**
+     * Reconstruit le Chemin à emprunter en fonction des precedents sommets parcourus.
+     * @param prev Tableaux de DIRECTIONS.
+     * @param src Début du chemin.
+     * @param target Fin du chemin.
+     * @param dim Dimension de la carte.
+     * @return Liste de Directions à prendre pour se diriger de source à destination.
+     */
+    public static List<Direction> reconstructPath(Direction[] prev, int src, int target, int dim) {
         List<Direction> path = new ArrayList<>();
-        for (int at = target; at != -1; at = prev[at]) {
-            path.addFirst(null);
+        int cur = target;
+        while (prev[cur] != Direction.NONE) {
+            Direction dir = prev[cur];
+            switch (dir) {
+                case NORD:
+                    cur = cur+dim;
+                    break;
+                case SUD:
+                    cur = cur-dim;
+                    break;
+                case EST:
+                    cur = cur-1;
+                    break;
+                case OUEST:
+                    cur = cur+1;
+                    break;
+                default:
+                    break;
+            }
+            path.addFirst(dir);
         }
-        Collections.reverse(path);
-        return path.get(0) == src ? path : Collections.emptyList();
-    } */
+        return cur == src ? path : Collections.emptyList();
+    }
 }
