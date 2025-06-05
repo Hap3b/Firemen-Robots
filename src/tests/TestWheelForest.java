@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -18,9 +19,11 @@ import simulator.Events.Move;
 import simulator.Events.Exceptions.MoveImpossibleException;
 import simulator.Events.Exceptions.RefillImpossibleException;
 import simulator.Events.Exceptions.TurnOffImpossibleException;
+import tests.category.GUITest;
 
 public class TestWheelForest {
     @Test
+    @Category(GUITest.class)
     public void testWheelForest() throws FileNotFoundException, DataFormatException,
     MoveImpossibleException, RefillImpossibleException, TurnOffImpossibleException {
 

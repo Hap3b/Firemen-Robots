@@ -27,4 +27,7 @@ jobs:
 
       - name: Run tests with xvfb
         run: |
-          xvfb-run --auto-servernum make test
+          xvfb-run --auto-servernum make test_gui
+
+      - name: Run tests without GUI
+        run: make test_no_gui

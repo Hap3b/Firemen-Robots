@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -18,9 +19,11 @@ import simulator.Events.Move;
 import simulator.Events.Exceptions.MoveImpossibleException;
 import simulator.Events.Exceptions.RefillImpossibleException;
 import simulator.Events.Exceptions.TurnOffImpossibleException;
+import tests.category.GUITest;
 
 public class TestPattesWater {
     @Test
+    @Category(GUITest.class)
     public void testPattesWater() throws FileNotFoundException, DataFormatException,
     MoveImpossibleException, RefillImpossibleException, TurnOffImpossibleException {
         DonneesSimulation data = new DonneesSimulation();
@@ -35,7 +38,6 @@ public class TestPattesWater {
         Move left5 = new Move(left4.getDateEnd(), data.getRobots()[2], Direction.OUEST);
         // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(Math.min(nbLine*size, 5000), Math.min(nbCol*size, 5000), Color.BLACK);
-        // crée l'invader, en l'associant à la fenêtre graphique précédente
         Simulator sim = new Simulator(gui, data);
         sim.addEvents(left2);
         sim.addEvents(left3);

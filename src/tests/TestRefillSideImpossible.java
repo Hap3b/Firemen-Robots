@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -18,9 +19,11 @@ import simulator.Events.Refill;
 import simulator.Events.Exceptions.MoveImpossibleException;
 import simulator.Events.Exceptions.RefillImpossibleException;
 import simulator.Events.Exceptions.TurnOffImpossibleException;
+import tests.category.GUITest;
 
 public class TestRefillSideImpossible {
     @Test
+    @Category(GUITest.class)
     public void testSideImpossible() throws FileNotFoundException, DataFormatException,
     MoveImpossibleException, RefillImpossibleException, TurnOffImpossibleException {
         DonneesSimulation data = new DonneesSimulation();
@@ -31,7 +34,6 @@ public class TestRefillSideImpossible {
         Refill fill = new Refill(0, data.getRobots()[1]);
         // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(Math.min(nbLine*size, 1920), Math.min(nbCol*size, 1080), Color.BLACK);
-        // crée l'invader, en l'associant à la fenêtre graphique précédente
         Simulator sim = new Simulator(gui, data);
         sim.addEvents(fill);
         fill.setSim(sim);

@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import field.Direction;
 
@@ -21,9 +22,11 @@ import simulator.Events.Move;
 import simulator.Events.Exceptions.MoveImpossibleException;
 import simulator.Events.Exceptions.RefillImpossibleException;
 import simulator.Events.Exceptions.TurnOffImpossibleException;
+import tests.category.GUITest;
 
 public class TestOutOfBond {
     @Test
+    @Category(GUITest.class)
     public void testOutOfBond() throws FileNotFoundException, DataFormatException,
     MoveImpossibleException, RefillImpossibleException, TurnOffImpossibleException {
         

@@ -24,6 +24,13 @@ coverage_report: test
 	mkdir -p $(REPORT_DIR)
 	java -jar $(JACOCO_CLI) report $(COVERAGE_FILE) --classfiles bin --sourcefiles src --html $(REPORT_DIR)
 
+test_gui: compile
+	java -javaagent:$(JACOCO_AGENT)=destfile=$(COVERAGE_FILE) -classpath $(CLASSPATH) org.junit.runner.JUnitCore tests.suites.GUITestSuite
+
+test_no_gui: compile
+	java -javaagent:$(JACOCO_AGENT)=destfile=$(COVERAGE_FILE) -classpath $(CLASSPATH) org.junit.runner.JUnitCore tests.suites.NoGUITestsSuite
+
+
 # Nettoyage
 clean:
 	rm -rf bin/* $(COVERAGE_FILE) $(REPORT_DIR)

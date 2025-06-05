@@ -1,12 +1,14 @@
 package tests;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import field.Case;
 import io.DonneesSimulation;
 import io.LecteurDonnees;
 import machines.Robots;
 import paths.GPS;
+import tests.category.NoGUITests;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,6 +19,7 @@ import java.util.zip.DataFormatException;
 public class TestCostPaths {
     
     @Test
+    @Category(NoGUITests.class)
     public void testCostPaths() throws FileNotFoundException, DataFormatException {
         DonneesSimulation data = new DonneesSimulation();
         data = LecteurDonnees.lire("cartes/carteSujet.map");
