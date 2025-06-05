@@ -1,8 +1,8 @@
 package paths;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -92,7 +92,7 @@ public class GPS {
      * @return Liste de Directions à prendre pour se diriger de source à destination.
      */
     public static List<Direction> reconstructPath(Direction[] prev, int src, int target, int dim) {
-        List<Direction> path = new ArrayList<>();
+        List<Direction> path = new LinkedList<>();
         int cur = target;
         while (prev[cur] != Direction.NONE) {
             Direction dir = prev[cur];
