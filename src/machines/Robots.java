@@ -124,6 +124,9 @@ public abstract class Robots {
         long date = dateStart;
         for (Direction dir : path) {
             Move move = new Move(date, this, dir);
+            if (date == 0) { // Initialisation of the events simulator
+                move.setSim(simulator);
+            }
             double speed = this.getSpeed(position.getMap().getNeighbor(position, dir).getBiome());
             date = (long) ((long) 3.6*position.getMap().getSizeCase()/speed) + date;
             Robots.sim.addEvents(move);
