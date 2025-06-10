@@ -17,7 +17,7 @@ compile:
 
 # Exécuter les tests avec JaCoCo
 test: compile
-	java -javaagent:$(JACOCO_AGENT)=destfile=$(COVERAGE_FILE) -classpath $(CLASSPATH) org.junit.runner.JUnitCore $(shell find bin/tests -name "*.class" | sed 's/bin\/tests\///' | sed 's/\.class//' | tr '/' '.' | sed 's/^/tests./')
+	java -javaagent:$(JACOCO_AGENT)=destfile=$(COVERAGE_FILE) -classpath $(CLASSPATH) org.junit.runner.JUnitCore tests.suites.GUITestSuite tests.suites.NoGUITestsSuite
 
 # Générer un rapport de couverture JaCoCo
 coverage_report: test

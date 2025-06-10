@@ -22,6 +22,7 @@ import tests.category.GUITest;
     tests.TestScenario1.class,
     tests.TestWheelForest.class,
     tests.TestWheelRock.class,
-    tests.TestWheelWater.class
+    tests.TestWheelWater.class,
+    tests.TestMoveAllTheWay.class,
 })
 public class GUITestSuite {}

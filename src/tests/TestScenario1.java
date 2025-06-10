@@ -36,7 +36,6 @@ public class TestScenario1 {
         int size = data.getMap().getSizeCase();
         // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(Math.min(nbLine*size, 1920), Math.min(nbCol*size, 1080), Color.BLACK);
-        // crée l'invader, en l'associant à la fenêtre graphique précédente
         Simulator sim = new Simulator(gui, data);
         Robots firemen = data.getRobots()[1];
         Move top = new Move(0, firemen, Direction.NORD);

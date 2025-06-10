@@ -32,20 +32,24 @@ public class TestChenillesForest {
         int size = data.getMap().getSizeCase();
         Move right1 = new Move(0, data.getRobots()[0], Direction.EST);
         Move top = new Move(right1.getDateEnd(), data.getRobots()[0], Direction.NORD);
+        Move right2 = new Move(top.getDateEnd(), data.getRobots()[0], Direction.EST);
+        Move bot = new Move(right2.getDateEnd(), data.getRobots()[0], Direction.SUD);
 
         GUISimulator gui = new GUISimulator(Math.min(nbLine*size, 5000), Math.min(nbCol*size, 5000), Color.BLACK);
         Simulator sim = new Simulator(gui, data);
         sim.addEvents(right1);
         sim.addEvents(top);
+        sim.addEvents(right2);
+        sim.addEvents(bot);
         top.setSim(sim);
 
-        for (long i = 0; i < top.getDateEnd(); i++) {
+        for (long i = 0; i < bot.getDateEnd(); i++) {
             sim.execute();
         }
 
         int speed = (int) data.getRobots()[0].getSpeed(null);
 
-        assertEquals(speed, 30);
+        assertEquals(speed, 15);
     }
 }
 
