@@ -104,7 +104,7 @@ public class Pattes extends Robots {
         gui.addGraphicalElement(new ImageElement(50+size*col+center, 50+size*lig+center, "images/pattes.jpeg", smallImage, smallImage, gui));
     }
 
-     public Case findNearestWaterCase(Case start, Robots robot) {
+     public Case findNearestWaterCase(Case start) {
         int nbLines = start.getMap().getNbLine();
         int nbCols = start.getMap().getNbCol();
 
@@ -119,12 +119,12 @@ public class Pattes extends Robots {
                     for (Direction dir : Direction.values()) {
                         Case neighbor = current.getMap().getNeighbor(current, dir);
                         if (neighbor != null) {
-                            long cost = GPS.costPaths(start, neighbor, robot);
+                            long cost = GPS.costPaths(start, neighbor, this);
 
                             if (cost < minCost) {
                                 minCost = cost;
                                 closestWater = neighbor;
-                                bestPath = new LinkedList<>(robot.getPath());
+                                bestPath = new LinkedList<>(this.getPath());
                             }
                         }
                     }
@@ -133,7 +133,7 @@ public class Pattes extends Robots {
         }
 
         if (bestPath != null) {
-            robot.setPath(bestPath);
+            this.setPath(bestPath);
         }
 
         return closestWater;

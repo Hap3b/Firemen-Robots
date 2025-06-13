@@ -104,7 +104,7 @@ public class Drone extends Robots{
         gui.addGraphicalElement(new ImageElement(50+size*col+center, 50+size*lig+center, "images/drone.png", smallImage, smallImage, gui));
     }
 
-     public Case findNearestWaterCase(Case start, Robots robot) {
+     public Case findNearestWaterCase(Case start) {
         int nbLines = start.getMap().getNbLine();
         int nbCols = start.getMap().getNbCol();
 
@@ -116,19 +116,19 @@ public class Drone extends Robots{
             for (int j = 0; j < nbCols; j++) {
                 Case current = start.getMap().getCase(i, j);
                 if (current.getBiome() == NatureTerrain.EAU) {
-                    long cost = GPS.costPaths(start, current, robot);
+                    long cost = GPS.costPaths(start, current, this);
 
                     if (cost < minCost) {
                         minCost = cost;
                         closestWater = current;
-                        bestPath = new LinkedList<>(robot.getPath());
+                        bestPath = new LinkedList<>(this.getPath());
                     }
                 }
             }
         }
 
         if (bestPath != null) {
-            robot.setPath(bestPath);
+            this.setPath(bestPath);
         }
 
         return closestWater;

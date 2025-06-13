@@ -42,7 +42,7 @@ public class RobotsManager {
                                 dateRobots[idxRobot] = firemen.emptyReserve(fire.getCase(), dateRobots[idxRobot], sim);
                                 damage[idxFire] += firemen.water;
                                 if (firemen.getWater()<=fire.getLife()-damage[idxFire]) {
-                                    Case water = firemen.findNearestWaterCase(fire.getCase(), firemen);
+                                    Case water = firemen.findNearestWaterCase(fire.getCase());
                                     dateRobots[idxRobot] = firemen.moveAllTheWay(posRobots[idxRobot], water, dateRobots[idxRobot], sim);
                                     posRobots[idxRobot] = water;
                                     dateRobots[idxRobot] = firemen.completeFill(dateRobots[idxRobot], sim);

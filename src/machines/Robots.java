@@ -124,29 +124,20 @@ public abstract class Robots {
         return this.graph;
     }
 
+    /**
+     * 
+     * @param path Met le chemin à emprunter par le robot.
+     */
     public void setPath(Deque<Direction> path) {
         this.path = path;
     }
 
+    /**
+     * 
+     * @return Chemin que le robot va emprunter
+     */
     public Deque<Direction> getPath() {
         return this.path;
-    }
-
-    public long moveAllTheWay(Case dest, long dateStart, Simulator simulator) throws MoveImpossibleException {
-        if (Robots.sim == null) {
-            Robots.sim = simulator;
-        }
-        GPS.costPaths(position, dest, this);
-        long date = dateStart;
-        for (Direction dir : path) {
-            Move move = new Move(date, this, dir);
-            if (date == 0) { // Initialisation of the events simulator
-                move.setSim(simulator);
-            }
-            date = move.getDateEnd();
-            addEvents(move);
-        }
-        return date;
     }
 
     public long moveAllTheWay(Case start, Case dest, long dateStart, Simulator simulator) throws MoveImpossibleException {
@@ -317,7 +308,12 @@ public abstract class Robots {
         return eventsPriorityQueue.isEmpty();
     }
 
-    public abstract Case findNearestWaterCase(Case start, Robots robot);
+    /**
+     * Renvoie la case où le robot peut se recharger la plus proche.
+     * @param start, Position depuis laquelle calculer la case de recharge.
+     * @return Case pour se recharger la plus proche.
+     */
+    public abstract Case findNearestWaterCase(Case start);
 
     @Override
     public abstract Robots clone();

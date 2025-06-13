@@ -13,7 +13,6 @@ import field.Direction;
  */
 public class Move extends Evenement {
     private Direction dir;
-    private Robots machine;
 
     /**
      * Constructeur d'un évenement déplacement.

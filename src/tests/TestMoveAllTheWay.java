@@ -34,7 +34,7 @@ public class TestMoveAllTheWay {
         Simulator sim = new Simulator(gui, data);
         Robots firemen = data.getRobots()[1];
         Case dest = new Case(5, 3);
-        firemen.moveAllTheWay(dest, 0, sim);
+        firemen.moveAllTheWay(firemen.getPosition(), dest, 0, sim);
         for (long i = 0; i<1125; i++) {
             sim.execute();
         }
