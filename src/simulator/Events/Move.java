@@ -41,6 +41,12 @@ public class Move extends Evenement {
             if (machine.getPosition().getFire()!=null && machine.getPosition().getFire().getLife()>0) {
                 sim.drawFire(machine.getPosition());
             }
+            Case old = machine.getPosition();
+            for (Robots robot : sim.getData().getRobots()) {
+                if (robot!=machine&&robot.getPosition().getColumn()==old.getColumn()&&robot.getPosition().getLine()==old.getLine()) {
+                    robot.draw(sim.getGUI());
+                }
+            }
             machine.move(this.dir);
 
             machine.draw(sim.getGUI());
