@@ -22,8 +22,8 @@ public class Pattes extends Robots {
      public Pattes(Case position) {
         super(position);
         this.speed = 30;
-        this.reserve = 2147483647; // Max value for an int type
-        this.water = 2147483647;
+        this.reserve = Integer.MAX_VALUE;
+        this.water = Integer.MAX_VALUE;
         this.timeWater = 1;
         this.quantityWater = 10;
         this.timeRefill = 0;
