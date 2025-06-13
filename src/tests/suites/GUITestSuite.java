@@ -24,5 +24,6 @@ import tests.category.GUITest;
     tests.TestWheelRock.class,
     tests.TestWheelWater.class,
     tests.TestMoveAllTheWay.class,
+    tests.TestElem.class
 })
 public class GUITestSuite {}

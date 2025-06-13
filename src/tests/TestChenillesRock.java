@@ -14,6 +14,7 @@ import field.Direction;
 import gui.GUISimulator;
 import io.DonneesSimulation;
 import io.LecteurDonnees;
+import machines.Robots;
 import simulator.Simulator;
 import simulator.Events.Move;
 import simulator.Events.Exceptions.MoveImpossibleException;
@@ -31,12 +32,13 @@ public class TestChenillesRock {
         int nbLine = data.getMap().getNbLine();
         int nbCol = data.getMap().getNbCol();
         int size = data.getMap().getSizeCase();
-        Move top = new Move(0, data.getRobots()[0], Direction.NORD);
+        Robots firemen = data.getRobots()[0];
+        Move top = new Move(0, firemen, Direction.NORD);
 
         // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(Math.min(nbLine*size, 5000), Math.min(nbCol*size, 5000), Color.BLACK);
         Simulator sim = new Simulator(gui, data);
-        sim.addEvents(top);
+        firemen.addEvents(top);
         top.setSim(sim);
 
         MoveImpossibleException exception = assertThrows(MoveImpossibleException.class, () -> {

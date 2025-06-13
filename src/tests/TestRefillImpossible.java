@@ -16,6 +16,7 @@ import java.awt.Color;
 import gui.GUISimulator;
 import io.DonneesSimulation;
 import io.LecteurDonnees;
+import machines.Robots;
 import simulator.Simulator;
 import simulator.Events.Move;
 import simulator.Events.Refill;
@@ -34,14 +35,15 @@ public class TestRefillImpossible {
         int nbLine = data.getMap().getNbLine();
         int nbCol = data.getMap().getNbCol();
         int size = data.getMap().getSizeCase();
-        Move right = new Move(0, data.getRobots()[0], Direction.EST);
-        Refill fill = new Refill(right.getDateEnd(), data.getRobots()[0]);
+        Robots firemen = data.getRobots()[0];
+        Move right = new Move(0, firemen, Direction.EST);
+        Refill fill = new Refill(right.getDateEnd(), firemen);
         // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(Math.min(nbLine*size, 1920), Math.min(nbCol*size, 1080), Color.BLACK);
         // crée l'invader, en l'associant à la fenêtre graphique précédente
         Simulator sim = new Simulator(gui, data);
-        sim.addEvents(fill);
-        sim.addEvents(right);
+        firemen.addEvents(fill);
+        firemen.addEvents(right);
         fill.setSim(sim);
         RefillImpossibleException exception = assertThrows(RefillImpossibleException.class, () -> {
             for (long i = 0; i<fill.getDateEnd(); i++) {

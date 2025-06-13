@@ -13,6 +13,7 @@ import field.Direction;
 import gui.GUISimulator;
 import io.DonneesSimulation;
 import io.LecteurDonnees;
+import machines.Robots;
 import simulator.Simulator;
 import simulator.Events.Move;
 import simulator.Events.Exceptions.MoveImpossibleException;
@@ -30,26 +31,24 @@ public class TestChenillesForest {
         int nbLine = data.getMap().getNbLine();
         int nbCol = data.getMap().getNbCol();
         int size = data.getMap().getSizeCase();
-        Move right1 = new Move(0, data.getRobots()[0], Direction.EST);
-        Move top = new Move(right1.getDateEnd(), data.getRobots()[0], Direction.NORD);
-        Move right2 = new Move(top.getDateEnd(), data.getRobots()[0], Direction.EST);
-        Move bot = new Move(right2.getDateEnd(), data.getRobots()[0], Direction.SUD);
+        Robots firemen = data.getRobots()[0];
+        
+        Move right1 = new Move(0, firemen, Direction.EST);
+        Move top = new Move(right1.getDateEnd(), firemen, Direction.NORD);
 
         GUISimulator gui = new GUISimulator(Math.min(nbLine*size, 5000), Math.min(nbCol*size, 5000), Color.BLACK);
         Simulator sim = new Simulator(gui, data);
-        sim.addEvents(right1);
-        sim.addEvents(top);
-        sim.addEvents(right2);
-        sim.addEvents(bot);
+        firemen.addEvents(right1);
+        firemen.addEvents(top);
         top.setSim(sim);
 
-        for (long i = 0; i < bot.getDateEnd(); i++) {
+        for (long i = 0; i < top.getDateEnd(); i++) {
             sim.execute();
         }
 
         int speed = (int) data.getRobots()[0].getSpeed(null);
 
-        assertEquals(speed, 15);
+        assertEquals(30, speed);
     }
 }
 

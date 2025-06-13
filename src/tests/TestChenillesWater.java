@@ -15,6 +15,7 @@ import java.awt.Color;
 import gui.GUISimulator;
 import io.DonneesSimulation;
 import io.LecteurDonnees;
+import machines.Robots;
 import simulator.Simulator;
 import simulator.Events.Move;
 import simulator.Events.Exceptions.MoveImpossibleException;
@@ -32,14 +33,15 @@ public class TestChenillesWater {
         int nbLine = data.getMap().getNbLine();
         int nbCol = data.getMap().getNbCol();
         int size = data.getMap().getSizeCase();
-        Move left = new Move(0, data.getRobots()[0], Direction.OUEST);
-        Move top = new Move(left.getDateEnd(), data.getRobots()[0], Direction.NORD);
+        Robots firemen = data.getRobots()[0];
+        Move left = new Move(0, firemen, Direction.OUEST);
+        Move top = new Move(left.getDateEnd(), firemen, Direction.NORD);
 
         // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(Math.min(nbLine*size, 5000), Math.min(nbCol*size, 5000), Color.BLACK);
         Simulator sim = new Simulator(gui, data);
-        sim.addEvents(left);
-        sim.addEvents(top);
+        firemen.addEvents(left);
+        firemen.addEvents(top);
         top.setSim(sim);
 
         MoveImpossibleException exception = assertThrows(MoveImpossibleException.class, () -> {

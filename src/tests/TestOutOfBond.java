@@ -17,6 +17,7 @@ import java.awt.Color;
 import gui.GUISimulator;
 import io.DonneesSimulation;
 import io.LecteurDonnees;
+import machines.Robots;
 import simulator.Simulator;
 import simulator.Events.Move;
 import simulator.Events.Exceptions.MoveImpossibleException;
@@ -36,18 +37,19 @@ public class TestOutOfBond {
             int nbLine = data.getMap().getNbLine();
             int nbCol = data.getMap().getNbCol();
             int size = data.getMap().getSizeCase();
-            Move top1 = new Move(0, data.getRobots()[0], Direction.NORD);
-            Move top2 = new Move(top1.getDateEnd(), data.getRobots()[0], Direction.NORD);
-            Move top3 = new Move(top2.getDateEnd(), data.getRobots()[0], Direction.NORD);
-            Move top4 = new Move(top3.getDateEnd(), data.getRobots()[0], Direction.NORD);
+            Robots firemen = data.getRobots()[0];
+            Move top1 = new Move(0, firemen, Direction.NORD);
+            Move top2 = new Move(top1.getDateEnd(), firemen, Direction.NORD);
+            Move top3 = new Move(top2.getDateEnd(), firemen, Direction.NORD);
+            Move top4 = new Move(top3.getDateEnd(), firemen, Direction.NORD);
             // crée la fenêtre graphique dans laquelle dessiner
             GUISimulator gui = new GUISimulator(Math.min(nbLine*size, 5000), Math.min(nbCol*size, 5000), Color.BLACK);
             // crée l'invader, en l'associant à la fenêtre graphique précédente
             Simulator sim = new Simulator(gui, data);
-            sim.addEvents(top1);
-            sim.addEvents(top2);
-            sim.addEvents(top3);
-            sim.addEvents(top4);
+            firemen.addEvents(top1);
+            firemen.addEvents(top2);
+            firemen.addEvents(top3);
+            firemen.addEvents(top4);
             top1.setSim(sim);
             for (long i = 0; i < top4.getDateEnd(); i++) {
                 sim.execute();

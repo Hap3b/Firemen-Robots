@@ -14,6 +14,7 @@ import field.Direction;
 import gui.GUISimulator;
 import io.DonneesSimulation;
 import io.LecteurDonnees;
+import machines.Robots;
 import simulator.Simulator;
 import simulator.Events.Move;
 import simulator.Events.Exceptions.MoveImpossibleException;
@@ -31,19 +32,20 @@ public class TestPattesWater {
         int nbLine = data.getMap().getNbLine();
         int nbCol = data.getMap().getNbCol();
         int size = data.getMap().getSizeCase();
-        Move left1 = new Move(0, data.getRobots()[2], Direction.OUEST);
-        Move left2 = new Move(left1.getDateEnd(), data.getRobots()[2], Direction.OUEST);
-        Move left3 = new Move(left2.getDateEnd(), data.getRobots()[2], Direction.OUEST);
-        Move left4 = new Move(left3.getDateEnd(), data.getRobots()[2], Direction.OUEST);
-        Move left5 = new Move(left4.getDateEnd(), data.getRobots()[2], Direction.OUEST);
+        Robots firemen = data.getRobots()[2];
+        Move left1 = new Move(0, firemen, Direction.OUEST);
+        Move left2 = new Move(left1.getDateEnd(), firemen, Direction.OUEST);
+        Move left3 = new Move(left2.getDateEnd(), firemen, Direction.OUEST);
+        Move left4 = new Move(left3.getDateEnd(), firemen, Direction.OUEST);
+        Move left5 = new Move(left4.getDateEnd(), firemen, Direction.OUEST);
         // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(Math.min(nbLine*size, 5000), Math.min(nbCol*size, 5000), Color.BLACK);
         Simulator sim = new Simulator(gui, data);
-        sim.addEvents(left2);
-        sim.addEvents(left3);
-        sim.addEvents(left4);
-        sim.addEvents(left5);
-        sim.addEvents(left1);
+        firemen.addEvents(left2);
+        firemen.addEvents(left3);
+        firemen.addEvents(left4);
+        firemen.addEvents(left5);
+        firemen.addEvents(left1);
         left1.setSim(sim);
         MoveImpossibleException exception = assertThrows(MoveImpossibleException.class, () -> {
             for (long i = 0; i<left5.getDateEnd(); i++) {

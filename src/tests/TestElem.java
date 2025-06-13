@@ -1,51 +1,41 @@
 package tests;
 
-
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import field.Direction;
-
-import static org.junit.Assert.assertEquals;
-
-import java.awt.Color;
-
 import gui.GUISimulator;
 import io.DonneesSimulation;
 import io.LecteurDonnees;
-import machines.Robots;
+import machines.RobotsManager;
 import simulator.Simulator;
-import simulator.Events.Move;
 import simulator.Events.Exceptions.MoveImpossibleException;
 import simulator.Events.Exceptions.RefillImpossibleException;
 import simulator.Events.Exceptions.TurnOffImpossibleException;
 import tests.category.GUITest;
 
-public class TestMove {
+public class TestElem {
     @Test
     @Category(GUITest.class)
-    public void testMove() throws FileNotFoundException, DataFormatException,
-    MoveImpossibleException, RefillImpossibleException, TurnOffImpossibleException {
+    public void testElem() throws MoveImpossibleException, TurnOffImpossibleException, FileNotFoundException, DataFormatException, RefillImpossibleException {
         DonneesSimulation data = new DonneesSimulation();
         data = LecteurDonnees.lire("cartes/carteSujet.map");
         int nbLine = data.getMap().getNbLine();
         int nbCol = data.getMap().getNbCol();
         int size = data.getMap().getSizeCase();
-        Robots firemen = data.getRobots()[0];
-        Move top = new Move(0, firemen, Direction.NORD);
 
-        GUISimulator gui = new GUISimulator(Math.min(nbLine*size, 5000), Math.min(nbCol*size, 5000), Color.BLACK);
+        // crée la fenêtre graphique dans laquelle dessiner
+        GUISimulator gui = new GUISimulator(Math.min(nbLine*size, 1920), Math.min(nbCol*size, 1080), Color.BLACK);
         Simulator sim = new Simulator(gui, data);
-        firemen.addEvents(top);
 
-        top.setSim(sim);
-        for (long i = 0; i < top.getDateEnd(); i++) {
+        RobotsManager chief = new RobotsManager(data.getFire(), data.getRobots(), sim);
+        chief.strategyElem();
+        for (int i = 0; i < 1000000000; i++) {
             sim.execute();
         }
-        assertEquals(data.getRobots()[0].getPosition().getLine(), 2);
-        assertEquals(data.getRobots()[0].getPosition().getColumn(), 3);
+        assert chief.isOff();
     }
 }

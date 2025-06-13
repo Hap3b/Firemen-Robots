@@ -41,30 +41,30 @@ public class TestScenario1 {
         Move top = new Move(0, firemen, Direction.NORD);
         top.setSim(sim);
         long dateEvt = top.getDateEnd();
-        sim.addEvents(top);
+        firemen.addEvents(top);
         for (int i = 0; i < (int) firemen.getReserve()/firemen.getQuantityWater(); i++) {
             TurnOff intervention = new TurnOff(dateEvt, firemen);
-            sim.addEvents(intervention);
+            firemen.addEvents(intervention);
             dateEvt = intervention.getDateEnd();
         }
         Move left1 = new Move(dateEvt, firemen, Direction.OUEST);
-        sim.addEvents(left1);
+        firemen.addEvents(left1);
         dateEvt = left1.getDateEnd();
         Move left2 = new Move(dateEvt, firemen, Direction.OUEST);
-        sim.addEvents(left2);
+        firemen.addEvents(left2);
         dateEvt = left2.getDateEnd();
         Refill fill = new Refill(dateEvt, firemen);
-        sim.addEvents(fill);
+        firemen.addEvents(fill);
         dateEvt = fill.getDateEnd();
         Move right1 = new Move(dateEvt, firemen, Direction.EST);
-        sim.addEvents(right1);
+        firemen.addEvents(right1);
         dateEvt = right1.getDateEnd();
         Move right2 = new Move(dateEvt, firemen, Direction.EST);
-        sim.addEvents(right2);
+        firemen.addEvents(right2);
         dateEvt = right2.getDateEnd();
         for (int i = 0; i<30; i++) {
             TurnOff intervention = new TurnOff(dateEvt, firemen);
-            sim.addEvents(intervention);
+            firemen.addEvents(intervention);
             dateEvt = intervention.getDateEnd();
         }
 

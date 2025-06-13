@@ -14,6 +14,7 @@ import java.awt.Color;
 import gui.GUISimulator;
 import io.DonneesSimulation;
 import io.LecteurDonnees;
+import machines.Robots;
 import simulator.Simulator;
 import simulator.Events.Refill;
 import simulator.Events.Exceptions.MoveImpossibleException;
@@ -31,11 +32,12 @@ public class TestRefillSideImpossible {
         int nbLine = data.getMap().getNbLine();
         int nbCol = data.getMap().getNbCol();
         int size = data.getMap().getSizeCase();
-        Refill fill = new Refill(0, data.getRobots()[1]);
+        Robots firemen = data.getRobots()[1];
+        Refill fill = new Refill(0, firemen);
         // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(Math.min(nbLine*size, 1920), Math.min(nbCol*size, 1080), Color.BLACK);
         Simulator sim = new Simulator(gui, data);
-        sim.addEvents(fill);
+        firemen.addEvents(fill);
         fill.setSim(sim);
         RefillImpossibleException exception = assertThrows(RefillImpossibleException.class, () -> {
             for (long i = 0; i<fill.getDateEnd(); i++) {
