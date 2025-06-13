@@ -18,6 +18,9 @@ public class Refill extends Evenement {
         super(date);
         this.machine = machine;
         this.dateEnd = date + (machine.getTimeRefill()*60);
+        if (dateEnd>machine.busy) {
+            machine.busy = dateEnd;
+        }
     }
 
     /**

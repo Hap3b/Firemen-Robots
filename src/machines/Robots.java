@@ -4,6 +4,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 import field.Case;
 import field.Direction;
@@ -11,7 +12,10 @@ import field.NatureTerrain;
 import gui.GUISimulator;
 import paths.GPS;
 import simulator.Simulator;
+import simulator.Events.Evenement;
 import simulator.Events.Move;
+import simulator.Events.Refill;
+import simulator.Events.TurnOff;
 import simulator.Events.Exceptions.MoveImpossibleException;
 import simulator.Events.Exceptions.RefillImpossibleException;
 import simulator.Events.Exceptions.TurnOffImpossibleException;;
@@ -37,7 +41,9 @@ public abstract class Robots {
     protected int timeRefill;
     protected Map<Direction, Double>[] graph;
     private Deque<Direction> path = new LinkedList<>();
-    private static Simulator sim;
+    public static Simulator sim;
+    public long busy;
+    public PriorityQueue<Evenement> eventsPriorityQueue;
 
     /**
      * Constructeur protégé car classe abstraite
@@ -47,6 +53,8 @@ public abstract class Robots {
     protected Robots(Case position) {
         this.position = position;
         this.water = 0;
+        this.busy = 0;
+        this.eventsPriorityQueue = new PriorityQueue<>();
     }
 
     /**
@@ -82,6 +90,10 @@ public abstract class Robots {
      */
     public abstract double getSpeed(Case pos, Direction dir) throws MoveImpossibleException;
 
+    public int getWater() {
+        return water;
+    }
+
     /**
      * Methode pour construire le graphe propre à chaque Robot
      */
@@ -116,7 +128,11 @@ public abstract class Robots {
         this.path = path;
     }
 
-    public void moveAllTheWay(Case dest, long dateStart, Simulator simulator) throws MoveImpossibleException {
+    public Deque<Direction> getPath() {
+        return this.path;
+    }
+
+    public long moveAllTheWay(Case dest, long dateStart, Simulator simulator) throws MoveImpossibleException {
         if (Robots.sim == null) {
             Robots.sim = simulator;
         }
@@ -127,10 +143,27 @@ public abstract class Robots {
             if (date == 0) { // Initialisation of the events simulator
                 move.setSim(simulator);
             }
-            double speed = this.getSpeed(position.getMap().getNeighbor(position, dir).getBiome());
-            date = (long) ((long) 3.6*position.getMap().getSizeCase()/speed) + date;
-            Robots.sim.addEvents(move);
+            date = move.getDateEnd();
+            addEvents(move);
         }
+        return date;
+    }
+
+    public long moveAllTheWay(Case start, Case dest, long dateStart, Simulator simulator) throws MoveImpossibleException {
+        if (Robots.sim == null) {
+            Robots.sim = simulator;
+        }
+        GPS.costPaths(start, dest, this);
+        long date = dateStart;
+        for (Direction dir : path) {
+            Move move = new Move(date, this, dir);
+            if (date == 0) { // Initialisation of the events simulator
+                move.setSim(simulator);
+            }
+            date = move.getDateEnd();
+            addEvents(move);
+        }
+        return date;
     }
 
     /**
@@ -227,8 +260,9 @@ public abstract class Robots {
         boolean waterAvailable = false;
 
         for (Direction dir : Direction.values()) {
-            if (dir != Direction.NONE && 
-            this.position.getMap().getNeighbor(this.position, dir).getBiome() == NatureTerrain.EAU) {
+            Case neighbor = this.position.getMap().getNeighbor(this.position, dir);
+            if (dir != Direction.NONE && neighbor != null &&
+            neighbor.getBiome() == NatureTerrain.EAU) {
                 waterAvailable = true;
             }
         }
@@ -240,6 +274,50 @@ public abstract class Robots {
             throw new RefillImpossibleException("Recharge Impossible en (" + this.position.getColumn() + ", " + this.position.getLine() + ")");
         }
     }
+
+    public long emptyReserve(Case fire, long dateStart, Simulator simulator) throws TurnOffImpossibleException {
+        if (fire.getFire() == null) {
+            throw new TurnOffImpossibleException("Pas d'incendie en (" + this.position.getColumn() + ", " + this.position.getLine() + ")");
+        }
+        if (Robots.sim == null) {
+            Robots.sim = simulator;
+        }
+        int waterThrown = 0;
+        while (this.water-waterThrown>0 && fire.getFire().getLife()-waterThrown>0) {
+            TurnOff turnOff = new TurnOff(dateStart, this);
+            addEvents(turnOff);
+            dateStart = turnOff.getDateEnd();
+            waterThrown += quantityWater;
+        }
+        return dateStart;
+    }
+
+    public long completeFill(long dateStart, Simulator simulator) {
+        if (Robots.sim == null) {
+            Robots.sim = simulator;
+        }
+        Refill fill = new Refill(dateStart, this);
+        addEvents(fill);
+        return dateStart + (timeRefill*60);
+    }
+
+    /**
+     * Ajoute l'évenement e à la file de priorité
+     * @param e
+     */
+    public void addEvents(Evenement e) {
+        eventsPriorityQueue.add(e);
+    }
+
+    /**
+     * 
+     * @return Vrai ou Faux si il n'y a plus d'évenements
+     */
+    public boolean endedSim() {
+        return eventsPriorityQueue.isEmpty();
+    }
+
+    public abstract Case findNearestWaterCase(Case start, Robots robot);
 
     @Override
     public abstract Robots clone();

@@ -2,6 +2,7 @@ package simulator.Events;
 
 import machines.Robots;
 import simulator.Events.Exceptions.MoveImpossibleException;
+import field.Case;
 import field.Direction;
 
 /**
@@ -12,6 +13,7 @@ import field.Direction;
  */
 public class Move extends Evenement {
     private Direction dir;
+    private Robots machine;
 
     /**
      * Constructeur d'un évenement déplacement.
@@ -25,6 +27,9 @@ public class Move extends Evenement {
         this.dir = dir;
         double speed = machine.getSpeed(machine.getPosition().getMap().getNeighbor(machine.getPosition(), dir).getBiome());
         this.dateEnd = (long) ((long) 3.6*machine.getPosition().getMap().getSizeCase()/speed) + date; // Convertion
+        if (dateEnd>machine.busy) {
+            machine.busy = dateEnd;
+        }
     }
 
     /**

@@ -1,10 +1,15 @@
 package machines;
 
 import field.NatureTerrain;
+
+import java.util.Deque;
+import java.util.LinkedList;
+
 import field.Case;
 import field.Direction;
 import gui.GUISimulator;
 import gui.ImageElement;
+import paths.GPS;
 import simulator.Events.Exceptions.MoveImpossibleException;
 import simulator.Events.Exceptions.RefillImpossibleException;
 
@@ -97,6 +102,36 @@ public class Drone extends Robots{
         int center = (int) (0.1*size);
 
         gui.addGraphicalElement(new ImageElement(50+size*col+center, 50+size*lig+center, "images/drone.png", smallImage, smallImage, gui));
+    }
+
+     public Case findNearestWaterCase(Case start, Robots robot) {
+        int nbLines = start.getMap().getNbLine();
+        int nbCols = start.getMap().getNbCol();
+
+        Case closestWater = null;
+        long minCost = Long.MAX_VALUE;
+        Deque<Direction> bestPath = null;
+
+        for (int i = 0; i < nbLines; i++) {
+            for (int j = 0; j < nbCols; j++) {
+                Case current = start.getMap().getCase(i, j);
+                if (current.getBiome() == NatureTerrain.EAU) {
+                    long cost = GPS.costPaths(start, current, robot);
+
+                    if (cost < minCost) {
+                        minCost = cost;
+                        closestWater = current;
+                        bestPath = new LinkedList<>(robot.getPath());
+                    }
+                }
+            }
+        }
+
+        if (bestPath != null) {
+            robot.setPath(bestPath);
+        }
+
+        return closestWater;
     }
 
     @Override

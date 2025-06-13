@@ -18,6 +18,9 @@ public class TurnOff extends Evenement {
         super(date);
         this.machine = firemen;
         this.dateEnd = date + this.machine.getTimeWater();
+        if (dateEnd>machine.busy) {
+            machine.busy = dateEnd;
+        }
     }
 
     /**

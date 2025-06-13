@@ -14,8 +14,6 @@ import simulator.Events.Exceptions.MoveImpossibleException;
 import simulator.Events.Exceptions.RefillImpossibleException;
 import simulator.Events.Exceptions.TurnOffImpossibleException;
 
-import java.util.PriorityQueue;
-
 /**
  * Module qui réalise l'interface simulable
  * Gère la gestion de la simulation
@@ -30,8 +28,7 @@ public class Simulator implements Simulable {
 
     private GUISimulator gui;
     private DonneesSimulation data;
-    private DonneesSimulation initialData;
-    private PriorityQueue<Evenement> eventsPriorityQueue = new PriorityQueue<>();
+    /* private DonneesSimulation initialData; */
 
     protected long dateSimulation;
 
@@ -51,12 +48,8 @@ public class Simulator implements Simulable {
         return this.dateSimulation;
     }
 
-    /**
-     * Ajoute l'évenement e à la file de priorité
-     * @param e
-     */
-    public void addEvents(Evenement e) {
-        eventsPriorityQueue.add(e);
+    public DonneesSimulation getData() {
+        return this.data;
     }
 
     /**
@@ -64,14 +57,6 @@ public class Simulator implements Simulable {
      */
     private void dateIncr() {
         this.dateSimulation += 1;
-    }
-
-    /**
-     * 
-     * @return Vrai ou Faux si il n'y a plus d'évenements
-     */
-    private boolean endedSim() {
-        return eventsPriorityQueue.isEmpty();
     }
 
     /**
@@ -90,7 +75,7 @@ public class Simulator implements Simulable {
         for (int i = 0; i < initialFire.length; i++) {
             initialFire[i] = (data.getFire()[i] != null) ? data.getFire()[i].clone() : null;
         }
-        this.initialData = new DonneesSimulation(data.getMap(), initialRobots, initialFire);
+        // this.initialData = new DonneesSimulation(data.getMap(), initialRobots, initialFire);
         gui.setSimulable(this);
         this.dateSimulation = 0;
 
@@ -99,18 +84,16 @@ public class Simulator implements Simulable {
 
     @Override
     public void next() {
-        if (!this.endedSim()) {
-            try {
-                this.execute();
-            } catch (MoveImpossibleException | RefillImpossibleException | TurnOffImpossibleException e) {
-                e.printStackTrace();
-            }
+        try {
+            this.execute();
+        } catch (MoveImpossibleException | RefillImpossibleException | TurnOffImpossibleException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void restart() {
-        Robots[] initialRobots = new Robots[initialData.getRobots().length];
+        /* Robots[] initialRobots = new Robots[initialData.getRobots().length];
         for (int i = 0; i < initialRobots.length; i++) {
             initialRobots[i] = (initialData.getRobots()[i] != null) ? initialData.getRobots()[i].clone() : null;
         }
@@ -121,7 +104,7 @@ public class Simulator implements Simulable {
         this.data = new DonneesSimulation(initialData.getMap(), initialRobots, initialFire);
         this.dateSimulation = 0;
         this.eventsPriorityQueue.clear();
-        drawMap();
+        drawMap(); */
         
     }
 
@@ -205,12 +188,19 @@ public class Simulator implements Simulable {
      * @throws RefillImpossibleException
      * @throws TurnOffImpossibleException
      */
-    public void execute() throws MoveImpossibleException, RefillImpossibleException, TurnOffImpossibleException {
-        this.dateIncr();
-        Evenement e = this.eventsPriorityQueue.poll();
-        e.execute();
-        if (e.getDateEnd()>this.dateSimulation) {
-            this.addEvents(e);
+    public void execute() 
+    throws MoveImpossibleException, RefillImpossibleException, TurnOffImpossibleException
+    {
+        dateIncr();
+        for (Robots machine : data.getRobots()) {
+            if (!machine.endedSim()) {
+                Evenement e = machine.eventsPriorityQueue.poll();
+                e.execute();
+                if (e.getDateEnd()>this.dateSimulation) {
+                    machine.addEvents(e);
+                }
+            }
         }
+
     }
 }
