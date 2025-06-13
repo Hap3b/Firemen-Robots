@@ -6,6 +6,16 @@ import simulator.Simulator;
 import simulator.Events.Exceptions.MoveImpossibleException;
 import simulator.Events.Exceptions.TurnOffImpossibleException;
 
+/**
+ * Module qui gère les actions des différents robots
+ * 6 attributs
+ * fires de type Incendie[]: tableaux de feux à éteindre
+ * team de type Robots[]: tableaux des robots pompiers
+ * sim de type Simulator: attribut statique qui gère la simulation
+ * damage[] de type long[]: tableaux des dégats infligés aux incendies
+ * dateRobots[] de type long[]: tableaux des dates à partir desquelles les robots sont libres
+ * posRobots[] de type Case[]: tableaux recensant les dernières positions des robots
+ */
 public class RobotsManager {
 
     protected Incendie[] fires;
@@ -15,6 +25,12 @@ public class RobotsManager {
     private long[] dateRobots;
     private Case[] posRobots;
 
+    /**
+     * Constructeur du manager, et initialisation des tableaux.
+     * @param fires Feu à eteindre.
+     * @param firemen Pompiers de l'équipe.
+     * @param sim Simulateur.
+     */
     public RobotsManager(Incendie[] fires, Robots[] firemen, Simulator sim) {
         this.fires = fires;
         this.team = firemen;
@@ -27,6 +43,11 @@ public class RobotsManager {
         }
     }
 
+    /**
+     * Stratégie élémentaire.
+     * @throws MoveImpossibleException
+     * @throws TurnOffImpossibleException
+     */
     public void strategyElem() throws MoveImpossibleException, TurnOffImpossibleException {
         long dateSim = 0;
         while (!isOff()) {
@@ -59,6 +80,10 @@ public class RobotsManager {
         }
     }
 
+    /**
+     * 
+     * @return true si tous les incendies sont éteints
+     */
     public boolean isOff() {
         for (int i=0; i<fires.length; i++) {
             if (fires[i].getLife()-damage[i]>0) {

@@ -126,6 +126,9 @@ public class Chenilles extends Robots{
         }
     }
     
+    /**
+     * Dessine une chenille.
+     */
     public void draw(GUISimulator gui) {
         int lig = this.position.getLine();
         int col = this.position.getColumn();

@@ -22,7 +22,7 @@ import simulator.Events.Exceptions.TurnOffImpossibleException;;
 
 /**
  * Module qui définit une classe abstraite de robots
- * 7 attributs
+ * 12 attributs
  * position de type Case: la position du robot
  * reserve de type int: la capacité maximale d'eau du robot
  * water de type int: la quantité d'eau dans le robot
@@ -30,6 +30,11 @@ import simulator.Events.Exceptions.TurnOffImpossibleException;;
  * timeWater de type int: secondes pour lacher quantityWater
  * quantityWater de type int: volume d'eau laché au bout de timeWater
  * timeRefill de type int: minutes nécessaire pour remplir le réservoir à fond
+ * graph de type Map<Direction, Double>[]: tableaux de map ou la direction donne le cout pour se déplacer dans la direction
+ * path de type LinkedList<Direction>: Chemin à prendre quand le simulateur lui demande d'aller sur une case
+ * sim de type Simulator: attribut statique qui définit la simulation
+ * busy de type long: date jusqu'à laquelle le robot est occupé
+ * eventsPriorityQueue de type PriorityQueue<Evenement>; Liste d'événements spécifiques aux robots
  */
 public abstract class Robots {
     protected Case position;
@@ -90,6 +95,10 @@ public abstract class Robots {
      */
     public abstract double getSpeed(Case pos, Direction dir) throws MoveImpossibleException;
 
+    /**
+     * 
+     * @return Eau dans le reservoir du robot
+     */
     public int getWater() {
         return water;
     }
@@ -117,6 +126,10 @@ public abstract class Robots {
         }
     }
 
+    /**
+     * Construit le graphe si ce n'est pas encore fait
+     * @return Graphe avec les couts pour le robot de se déplacer d'une case à une autre
+     */
     public Map<Direction, Double>[] getGraph() {
         if (graph == null) {
             buildGraph();
@@ -266,6 +279,14 @@ public abstract class Robots {
         }
     }
 
+    /**
+     * Vide sa reserve ou verse de l'eau jusqu'à ce que le feu soit éteint.
+     * @param fire Feu à éteindre.
+     * @param dateStart Date où l'événement commence.
+     * @param simulator Simulateur.
+     * @return Date de fin d'événement.
+     * @throws TurnOffImpossibleException
+     */
     public long emptyReserve(Case fire, long dateStart, Simulator simulator) throws TurnOffImpossibleException {
         if (fire.getFire() == null) {
             throw new TurnOffImpossibleException("Pas d'incendie en (" + this.position.getColumn() + ", " + this.position.getLine() + ")");
@@ -283,6 +304,12 @@ public abstract class Robots {
         return dateStart;
     }
 
+    /**
+     * Recharge la reserve d'eau jusqu'à ce qu'elle soit pleine.
+     * @param dateStart Date à laquelle l'événement commence.
+     * @param simulator Simulateur.
+     * @return Date à laquelle l'événement se termine.
+     */
     public long completeFill(long dateStart, Simulator simulator) {
         if (Robots.sim == null) {
             Robots.sim = simulator;

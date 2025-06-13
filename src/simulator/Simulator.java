@@ -17,11 +17,9 @@ import simulator.Events.Exceptions.TurnOffImpossibleException;
 /**
  * Module qui réalise l'interface simulable
  * Gère la gestion de la simulation
- * 5 attributs gui, data, initialization, dateSimulatio, eventsPriorityQueue
+ * 3 attributs gui, data, dateSimulation,
  * gui de type GUISimulator: interface graphique de la simulation
  * data de type DonneesSimulation: données de la simulation
- * initialData de type DonneesSimulation: attribut servant à la réinitialisation
- * eventsPriorityQueue une file de priorité d'Evenement
  * dateSimulation de type long: nombre de secondes depuis le début de la simulation
  */
 public class Simulator implements Simulable {
