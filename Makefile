@@ -42,3 +42,6 @@ clean_coverage:
 # Générer la documentation Javadoc
 doc:
 	javadoc -d doc -sourcepath src -subpackages field:io:machines:simulator -classpath $(GUI_CP)
+
+run: compile
+	java -classpath $(CLASSPATH) FiremenSimulation
